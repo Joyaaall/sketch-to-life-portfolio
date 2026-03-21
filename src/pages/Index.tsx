@@ -1,4 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import LoadingScreen from "@/components/LoadingScreen";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -8,14 +11,44 @@ import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import Contact from "@/components/Contact";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const Index = () => {
   const [loading, setLoading] = useState(true);
+  const lenisRef = useRef<Lenis | null>(null);
   const handleLoadComplete = useCallback(() => setLoading(false), []);
+
+  // Initialize Lenis smooth scrolling
+  useEffect(() => {
+    if (loading) return;
+
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+    lenisRef.current = lenis;
+
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, [loading]);
+
+  // Expose lenis globally for navbar scroll-to
+  useEffect(() => {
+    (window as any).__lenis = lenisRef.current;
+  });
 
   return (
     <>
       {loading && <LoadingScreen onComplete={handleLoadComplete} />}
-      <div className={loading ? "opacity-0" : "opacity-100"}>
+      <div className={loading ? "opacity-0" : "opacity-100 transition-opacity duration-500"}>
         <Navbar />
         <Hero />
         <TestimonialCards />
