@@ -113,57 +113,61 @@ const PhotoCarousel = () => {
         </h2>
 
         <div className="carousel-wrapper relative">
-          {/* Main carousel frame */}
-          <div className="brutalist-border brutalist-shadow rounded-2xl overflow-hidden bg-card relative">
-            <div className="overflow-hidden">
-              <div
-                ref={trackRef}
-                className="flex"
-                style={{ width: `${photos.length * 100}%` }}
-              >
-                {photos.map((photo, i) => (
-                  <div
-                    key={i}
-                    className="relative"
-                    style={{ width: `${100 / photos.length}%` }}
-                  >
-                    <img
-                      src={photo.src}
-                      alt={photo.caption}
-                      className="w-full aspect-[3/2] object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                ))}
+          {/* Image area with nav buttons */}
+          <div className="relative">
+            <div className="brutalist-border brutalist-shadow rounded-2xl overflow-hidden bg-card">
+              <div className="overflow-hidden">
+                <div
+                  ref={trackRef}
+                  className="flex"
+                  style={{ width: `${photos.length * 100}%` }}
+                >
+                  {photos.map((photo, i) => (
+                    <div
+                      key={i}
+                      className="relative"
+                      style={{ width: `${100 / photos.length}%` }}
+                    >
+                      <img
+                        src={photo.src}
+                        alt={photo.caption}
+                        className="w-full aspect-[3/2] object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Caption bar */}
+              <div className="px-5 py-4 bg-card border-t-4 border-foreground flex items-center justify-between">
+                <p className="font-display font-bold text-foreground text-sm md:text-base">
+                  {photos[current].caption}
+                </p>
+                <span className="font-display text-sm text-muted-foreground">
+                  {current + 1}/{photos.length}
+                </span>
               </div>
             </div>
 
-            {/* Caption bar */}
-            <div className="px-5 py-4 bg-card border-t-4 border-foreground flex items-center justify-between">
-              <p className="font-display font-bold text-foreground text-sm md:text-base">
-                {photos[current].caption}
-              </p>
-              <span className="font-display text-sm text-muted-foreground">
-                {current + 1}/{photos.length}
-              </span>
-            </div>
+            {/* Nav buttons — use calc to avoid translate conflicts */}
+            <button
+              onClick={prev}
+              style={{ top: "calc(50% - 20px)" }}
+              className="absolute -left-4 md:-left-6 bg-background brutalist-border brutalist-shadow-sm rounded-full p-2.5 hover:brightness-95 transition-all duration-200 active:scale-95 z-10"
+              aria-label="Previous photo"
+            >
+              <ChevronLeft size={20} className="text-foreground" />
+            </button>
+            <button
+              onClick={next}
+              style={{ top: "calc(50% - 20px)" }}
+              className="absolute -right-4 md:-right-6 bg-background brutalist-border brutalist-shadow-sm rounded-full p-2.5 hover:brightness-95 transition-all duration-200 active:scale-95 z-10"
+              aria-label="Next photo"
+            >
+              <ChevronRight size={20} className="text-foreground" />
+            </button>
           </div>
-
-          {/* Nav buttons */}
-          <button
-            onClick={prev}
-            className="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 bg-background brutalist-border brutalist-shadow-sm rounded-full p-2.5 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-200 active:scale-95 z-10"
-            aria-label="Previous photo"
-          >
-            <ChevronLeft size={20} className="text-foreground" />
-          </button>
-          <button
-            onClick={next}
-            className="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 bg-background brutalist-border brutalist-shadow-sm rounded-full p-2.5 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-200 active:scale-95 z-10"
-            aria-label="Next photo"
-          >
-            <ChevronRight size={20} className="text-foreground" />
-          </button>
 
           {/* Dot indicators */}
           <div className="flex justify-center gap-3 mt-6">
