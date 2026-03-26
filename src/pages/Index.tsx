@@ -50,7 +50,7 @@ const Index = () => {
   return (
     <>
       {loading && <LoadingScreen onComplete={handleLoadComplete} />}
-      <div className={loading ? "opacity-0" : "opacity-100 transition-opacity duration-500"}>
+      <div className={loading ? "opacity-0 scale-[0.98]" : "opacity-100 scale-100 transition-all duration-700 ease-out"}>
         <Navbar />
         <Hero />
         <TestimonialCards />
