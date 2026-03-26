@@ -57,6 +57,8 @@ const Index = () => {
         <About />
         <Projects />
         <Skills />
+        <Achievements />
+        <PhotoCarousel />
         <Contact />
         <footer className="text-center py-8 text-sm text-muted-foreground font-display">
           © {new Date().getFullYear()} Joyal. Built with care & too much coffee.
