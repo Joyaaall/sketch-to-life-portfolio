@@ -14,12 +14,22 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
   useEffect(() => {
     const tl = gsap.timeline({
       onComplete: () => {
-        gsap.to(containerRef.current, {
-          yPercent: -100,
-          duration: 0.8,
-          ease: "power3.inOut",
-          onComplete,
-        });
+        // Smooth exit: fade out + subtle scale
+        const exitTl = gsap.timeline({ onComplete });
+        exitTl
+          .to(".loading-letter, .loading-progress", {
+            y: -30,
+            opacity: 0,
+            stagger: 0.03,
+            duration: 0.4,
+            ease: "power2.in",
+          })
+          .to(containerRef.current, {
+            opacity: 0,
+            scale: 1.05,
+            duration: 0.6,
+            ease: "power2.inOut",
+          }, "-=0.15");
       },
     });
 
@@ -69,14 +79,14 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         </span>
       </div>
 
-      <div className="w-64 md:w-80 h-6 brutalist-border rounded-full overflow-hidden bg-card">
+      <div className="loading-progress w-64 md:w-80 h-6 brutalist-border rounded-full overflow-hidden bg-card">
         <div
           ref={progressRef}
           className="h-full bg-secondary rounded-full transition-none"
           style={{ width: "0%" }}
         />
       </div>
-      <span className="font-display font-bold text-lg mt-3 text-foreground">{progress}%</span>
+      <span className="loading-progress font-display font-bold text-lg mt-3 text-foreground">{progress}%</span>
     </div>
   );
 };
